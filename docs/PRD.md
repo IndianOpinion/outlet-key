@@ -30,9 +30,9 @@ host string is the wrong answer in both directions.
   the same numeric id. Some republish one article on sister hosts under a
   new id with the same headline.
 
-Measured result: before article ids were honoured, a 30-day scan of one
-production source table found 7 published pieces that listed one article
-twice, across four Indian outlets.
+Observed failure: before article ids were honoured, one newsroom was
+counted several times through its mobile, AMP and regional hosts, and a
+single article was listed as corroborating itself.
 
 Without this library each consumer writes its own prefix strip. The
 strips drift apart, one outlet ends up with two identities, and anything
