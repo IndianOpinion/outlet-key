@@ -109,14 +109,14 @@ Overrides union lists, merge tables with your entries winning, and delete entrie
 
 Outlet key, in order:
 
-1. Prepare the input: trim, decode HTML entities once, drop the scheme, user info, port and fragment. Lowercase the host, drop one trailing dot, convert IDN labels to A-labels with a built-in Punycode encoder. Unwrap a Google AMP cache URL once.
+1. Prepare the input: trim, decode HTML entities once, drop the scheme, user info, port and fragment. Percent-decode the host once, convert IDN labels to A-labels with a built-in Punycode encoder, lowercase ASCII letters and drop one trailing dot. Unwrap a Google AMP cache URL once.
 2. Strip mirror labels (`www`, `m`, `amp` and the rest of the map's list) from the left, never below two labels.
 3. Pass-through hosts such as `news.google.com` are kept whole.
 4. Take the registrable domain: the map's explicit suffixes, then two-letter country codes with a known second level (`bbc.co.uk`, `pib.gov.in`), then the last two labels.
 5. Portal bases (`indiatimes.com`, `blogspot.com` and others) keep the one label to their left as a separate publication, unless it is a language label.
 6. Look the result up once in the alias table (`ndtv.in` gives `ndtv.com`).
 
-IPv4 and IPv6 literals are returned as they are. An unusable host gives the empty key.
+IPv4 and IPv6 literals are returned as they are. An unusable host gives the empty key: so does a host whose last label is all digits but which is not an IPv4 address (`10.0.0.999`), and a scheme with nothing after it (`https:`).
 
 Article key: the outlet key, then the path with AMP markers, index files, repeated and trailing slashes removed, then the kept query. Tracking parameters always go. On a slug path only id parameters (`id`, `p`, `story` and the rest) survive. On a script path (`/`, `.php`, `.aspx` and others) every non-tracking parameter survives. Outlets with an id rule key as `outlet/a/<id>`, and slug outlets key as `outlet/s/<slug key>`.
 

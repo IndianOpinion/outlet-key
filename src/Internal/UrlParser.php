@@ -81,7 +81,7 @@ final class UrlParser
         if (
             $host[1] === ParsedUrl::HOST_NAME
             && str_ends_with($host[0], self::AMP_CACHE_SUFFIX)
-            && preg_match('~^/[A-Za-z]/(?:s/|(?!s(?:/|$)))([^/]+)(.*)$~sD', $path, $m) === 1
+            && preg_match('~^/[A-Za-z]/(?:[sS]/|(?![sS](?:/|$)))([^/]+)(.*)$~sD', $path, $m) === 1
         ) {
             $inner = self::authorityHost($m[1]);
             if (is_array($inner)) {
@@ -132,8 +132,8 @@ final class UrlParser
                 return null;
             }
             $last = $host[strlen($host) - 1];
-            if ($last >= '0' && $last <= '9' && preg_match(self::IPV4, $host) === 1) {
-                return [$host, ParsedUrl::HOST_IPV4];
+            if ($last >= '0' && $last <= '9') {
+                return self::numericTail($host);
             }
 
             return [$host, ParsedUrl::HOST_NAME];
@@ -153,8 +153,12 @@ final class UrlParser
         }
 
         // Case 11.
-        if (preg_match(self::IPV4, $host) === 1) {
-            return [$host, ParsedUrl::HOST_IPV4];
+        $last = $host[strlen($host) - 1];
+        if ($last >= '0' && $last <= '9') {
+            $numeric = self::numericTail($host);
+            if ($numeric === null || $numeric[1] === ParsedUrl::HOST_IPV4) {
+                return $numeric;
+            }
         }
 
         // Case 9 and 10.
@@ -188,6 +192,28 @@ final class UrlParser
     }
 
     /**
+     * A host whose last label ends in a digit: an IPv4 literal, a name whose
+     * last label also has letters, or (all digits, not an IPv4 literal, such
+     * as "10.0.0.999") unusable. No top-level domain is all digits, so such a
+     * host is a broken address, never a name.
+     *
+     * @return array{0: string, 1: string}|null
+     */
+    private static function numericTail(string $host): ?array
+    {
+        if (preg_match(self::IPV4, $host) === 1) {
+            return [$host, ParsedUrl::HOST_IPV4];
+        }
+        $dot = strrpos($host, '.');
+        $lastLabel = $dot === false ? $host : substr($host, $dot + 1);
+        if (preg_match('~^[0-9]+$~D', $lastLabel) === 1) {
+            return null;
+        }
+
+        return [$host, ParsedUrl::HOST_NAME];
+    }
+
+    /**
      * Drop the scheme (any RFC 3986 scheme, case 4) or, with none, the
      * leading slashes of a bare host (case 3). Null means a scheme with no
      * authority, such as mailto:.
@@ -201,8 +227,13 @@ final class UrlParser
         if (str_starts_with($after, '//')) {
             return substr($after, 2);
         }
-        // "host:8080/path" is a bare host with a port, not a scheme.
-        if (preg_match('~^[0-9]*(?:[/?#]|$)~D', $after) === 1) {
+        // "host:8080/path" is a bare host with a port, not a scheme. With an
+        // empty port ("example.com:/a") the would-be scheme must hold a dot,
+        // so a scheme on its own ("https:", "http:/x") is not read as a host.
+        if (
+            preg_match('~^[0-9]+(?:[/?#]|$)~D', $after) === 1
+            || (str_contains($m[0], '.') && preg_match('~^(?:[/?#]|$)~D', $after) === 1)
+        ) {
             return ltrim($input, '/');
         }
         // One nested scheme is allowed: "feed:https://host/".
@@ -256,6 +287,11 @@ final class UrlParser
         }
         if ($port !== '' && preg_match('~^[0-9]+$~D', $port) !== 1) {
             return 'port is not a number';
+        }
+        // A percent-encoded host ("b%C3%BCcher.example") is decoded once, as
+        // browsers do, then checked like any other host.
+        if (str_contains($hostPart, '%')) {
+            $hostPart = rawurldecode($hostPart);
         }
 
         $host = self::normaliseHost($hostPart);
