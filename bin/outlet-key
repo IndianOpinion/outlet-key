@@ -1,0 +1,40 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * outlet-key command line.
+ *
+ *   outlet-key <url>...              print "outlet<TAB>article" per URL
+ *   outlet-key -                     read URLs from stdin, one per line
+ *   outlet-key --explain <url>       print the trace
+ *   outlet-key validate [path]       validate a map (default: the bundled one)
+ *   outlet-key --map <path> ...      use another map
+ *   outlet-key --psl <path> ...      use a Public Suffix List file
+ *
+ * Exit codes: 0 success, 1 invalid map or a key error, 2 usage error.
+ */
+
+declare(strict_types=1);
+
+use IndianOpinion\OutletKey\Cli;
+
+$autoloaders = [
+    __DIR__ . '/../vendor/autoload.php',       // a clone with dependencies installed
+    __DIR__ . '/../../../autoload.php',        // installed as a Composer dependency
+    __DIR__ . '/../bootstrap.php',             // no Composer at all
+];
+foreach ($autoloaders as $file) {
+    if (is_file($file)) {
+        require $file;
+        break;
+    }
+}
+
+$stdin = fopen('php://stdin', 'rb');
+$stdout = fopen('php://stdout', 'wb');
+$stderr = fopen('php://stderr', 'wb');
+if ($stdin === false || $stdout === false || $stderr === false) {
+    exit(2);
+}
+
+exit((new Cli($stdin, $stdout, $stderr))->run(array_slice($argv, 1)));

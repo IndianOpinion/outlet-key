@@ -1,0 +1,277 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/IndianOpinion/outlet-key/blob/main/data/outlets.schema.json",
+  "title": "outlet-key outlet map",
+  "description": "The data file read by outlet-key. Lists are sorted in byte order with no duplicates; the library's own validator also checks ordering, alias chains, outlet-key validity and id-rule patterns (see docs/ARCHITECTURE.md).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "mirrorLabels",
+    "languageLabels",
+    "secondLevelLabels",
+    "suffixes",
+    "portalBases",
+    "passThrough",
+    "aliases",
+    "aggregators",
+    "articleIdRules",
+    "slugOutlets",
+    "caseInsensitivePaths",
+    "slug",
+    "query"
+  ],
+  "definitions": {
+    "label": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]([a-z0-9_-]{0,61}[a-z0-9_])?$"
+    },
+    "host": {
+      "type": "string",
+      "maxLength": 253,
+      "pattern": "^[a-z0-9_]([a-z0-9_-]{0,61}[a-z0-9_])?(\\.[a-z0-9_]([a-z0-9_-]{0,61}[a-z0-9_])?)*$"
+    },
+    "multiLabelHost": {
+      "type": "string",
+      "maxLength": 253,
+      "pattern": "^[a-z0-9_]([a-z0-9_-]{0,61}[a-z0-9_])?(\\.[a-z0-9_]([a-z0-9_-]{0,61}[a-z0-9_])?)+$"
+    },
+    "word": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+$"
+    },
+    "param": {
+      "type": "string",
+      "pattern": "^[a-z0-9_.\\[\\]-]+$"
+    }
+  },
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "description": "Map release, bumped on every change.",
+      "type": "string",
+      "pattern": "^[0-9]{4}\\.[0-9]{2}\\.[0-9]{2}(\\.[0-9]+)?$"
+    },
+    "mirrorLabels": {
+      "description": "Left-most labels stripped from a host (PRD case 14).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/label"
+      }
+    },
+    "languageLabels": {
+      "description": "Portal labels that name a language edition, not a publication (case 20).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/label"
+      }
+    },
+    "secondLevelLabels": {
+      "description": "Second-level labels under a two-letter country code (case 17b).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/label"
+      }
+    },
+    "suffixes": {
+      "description": "Explicit multi-label public suffixes (case 17a).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/multiLabelHost"
+      }
+    },
+    "portalBases": {
+      "description": "Registrable domains whose next label names a separate publication (case 19).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/multiLabelHost"
+      }
+    },
+    "passThrough": {
+      "description": "Hosts kept whole, never reduced to a registrable domain (case 16).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/host"
+      }
+    },
+    "aliases": {
+      "description": "Outlet key to outlet key, one hop (case 22).",
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/definitions/host"
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/host"
+      }
+    },
+    "aggregators": {
+      "description": "Outlet keys that aggregate other newsrooms (case 24).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/host"
+      }
+    },
+    "articleIdRules": {
+      "description": "Outlet key to a PCRE pattern with delimiters and exactly one capturing group (case 36).",
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/definitions/host"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 3
+      }
+    },
+    "slugOutlets": {
+      "description": "Outlet keys keyed by headline slug (case 37).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/host"
+      }
+    },
+    "caseInsensitivePaths": {
+      "description": "Outlet keys whose paths are lowercased before keying. Paths keep their case otherwise.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/host"
+      }
+    },
+    "slug": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stopWords",
+        "numberWords",
+        "recurringWords",
+        "minTokens"
+      ],
+      "properties": {
+        "stopWords": {
+          "description": "Dropped from slug tokens (case 38e).",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/word"
+          }
+        },
+        "numberWords": {
+          "description": "Number word to digits (case 38f).",
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/definitions/word"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[0-9]+$"
+          }
+        },
+        "recurringWords": {
+          "description": "A slug holding any of these gives no slug key (case 38i).",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/word"
+          }
+        },
+        "minTokens": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 20
+        }
+      }
+    },
+    "query": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "idParams",
+        "trackingParams",
+        "trackingPrefixes",
+        "scriptExtensions"
+      ],
+      "properties": {
+        "idParams": {
+          "description": "Query keys kept on a slug path (case 35).",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/param"
+          }
+        },
+        "trackingParams": {
+          "description": "Query keys always dropped (case 34).",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/param"
+          }
+        },
+        "trackingPrefixes": {
+          "description": "Query key prefixes always dropped (case 34).",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/param"
+          }
+        },
+        "scriptExtensions": {
+          "description": "Path extensions that make a script path (case 35).",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/word"
+          }
+        }
+      }
+    },
+    "notes": {
+      "description": "Evidence for entries, for humans. Ignored when keying, except that id-rule examples must match their pattern.",
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "text": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidence": {
+                "type": "string",
+                "minLength": 1
+              },
+              "added": {
+                "type": "string",
+                "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+              },
+              "examples": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "pattern": "^/"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

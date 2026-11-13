@@ -1,0 +1,312 @@
+{
+  "$schema": "./outlets.schema.json",
+  "aggregators": [
+    "dailyhunt.in",
+    "flipboard.com",
+    "inshorts.com",
+    "msn.com",
+    "news.google.com",
+    "newsbreak.com",
+    "yahoo.com"
+  ],
+  "aliases": {
+    "bbc.co.uk": "bbc.com",
+    "economictimes.com": "economictimes.indiatimes.com",
+    "ndtv.in": "ndtv.com"
+  },
+  "articleIdRules": {
+    "deccanherald.com": "~-([0-9]{6,})$~D",
+    "ndtv.com": "~-([0-9]{6,})$~D",
+    "thehindu.com": "~/article([0-9]{6,})\\.ece$~Di",
+    "thehindubusinessline.com": "~/article([0-9]{6,})\\.ece$~Di",
+    "timesnownews.com": "~-article-([0-9]{6,})$~Di",
+    "timesofindia.indiatimes.com": "~/articleshow/([0-9]{6,})(?:\\.cms)?$~Di"
+  },
+  "caseInsensitivePaths": [],
+  "languageLabels": [
+    "assamese",
+    "bangla",
+    "bengali",
+    "en",
+    "english",
+    "gujarati",
+    "hi",
+    "hindi",
+    "kannada",
+    "malayalam",
+    "marathi",
+    "odia",
+    "oriya",
+    "punjabi",
+    "tamil",
+    "telugu",
+    "urdu"
+  ],
+  "mirrorLabels": [
+    "amp",
+    "lite",
+    "m",
+    "mob",
+    "mobile",
+    "touch",
+    "wap",
+    "ww",
+    "www",
+    "www1",
+    "www2",
+    "www3"
+  ],
+  "notes": {
+    "bbc.co.uk": {
+      "added": "2026-11-12",
+      "text": "One newsroom on two registrable domains; the UK domain is keyed as bbc.com. Seed entry from the 0.1.0 product requirements."
+    },
+    "deccanherald.com": {
+      "added": "2026-11-12",
+      "examples": [
+        "/india/some-headline-words-1234567"
+      ],
+      "text": "Article paths end in a numeric id after the slug. Seed entry from the 0.1.0 product requirements."
+    },
+    "economictimes.com": {
+      "added": "2026-11-12",
+      "text": "The short domain and its mobile host belong to the Economic Times newsroom under the indiatimes.com portal. Seed entry from the 0.1.0 product requirements."
+    },
+    "economictimes.indiatimes.com": {
+      "added": "2026-11-12",
+      "text": "Vertical hosts republish one article under new ids with the same headline slug, so the slug decides. Seed entry from the 0.1.0 product requirements."
+    },
+    "nasa.gov": {
+      "added": "2026-11-12",
+      "text": "Files one release under more than one path with the same headline slug. Seed entry from the 0.1.0 product requirements."
+    },
+    "ndtv.com": {
+      "added": "2026-11-12",
+      "examples": [
+        "/india-news/some-headline-words-1234567",
+        "/world-news/another-headline-7654321"
+      ],
+      "text": "Article paths end in a numeric id after the slug. Seed entry from the 0.1.0 product requirements."
+    },
+    "ndtv.in": {
+      "added": "2026-11-12",
+      "text": "The .in domain belongs to the NDTV newsroom. Seed entry from the 0.1.0 product requirements."
+    },
+    "news.google.com": {
+      "added": "2026-11-12",
+      "text": "A redirect wrapper: kept whole so it never merges with its parent company's own outlet, and listed as an aggregator. Seed entry from the 0.1.0 product requirements."
+    },
+    "thehindu.com": {
+      "added": "2026-11-12",
+      "examples": [
+        "/news/national/some-headline/article12345678.ece"
+      ],
+      "text": "Article paths end in /article<id>.ece. Seed entry from the 0.1.0 product requirements."
+    },
+    "thehindubusinessline.com": {
+      "added": "2026-11-12",
+      "examples": [
+        "/economy/some-headline/article12345678.ece"
+      ],
+      "text": "Article paths end in /article<id>.ece. Seed entry from the 0.1.0 product requirements."
+    },
+    "timesnownews.com": {
+      "added": "2026-11-12",
+      "examples": [
+        "/india/some-headline-words-article-123456789"
+      ],
+      "text": "Article paths end in -article-<id>. Seed entry from the 0.1.0 product requirements."
+    },
+    "timesofindia.indiatimes.com": {
+      "added": "2026-11-12",
+      "examples": [
+        "/city/delhi/other-headline/articleshow/123456789.cms",
+        "/india/some-headline/articleshow/123456789.cms"
+      ],
+      "text": "Article paths carry /articleshow/<id>.cms. Seed entry from the 0.1.0 product requirements."
+    }
+  },
+  "passThrough": [
+    "news.google.com"
+  ],
+  "portalBases": [
+    "blogspot.com",
+    "github.io",
+    "india.com",
+    "indiatimes.com",
+    "medium.com",
+    "substack.com",
+    "tumblr.com",
+    "wordpress.com"
+  ],
+  "query": {
+    "idParams": [
+      "aid",
+      "article",
+      "article_id",
+      "articleid",
+      "content_id",
+      "contentid",
+      "id",
+      "news_id",
+      "newsid",
+      "nid",
+      "p",
+      "pid",
+      "post_id",
+      "postid",
+      "prid",
+      "sid",
+      "story",
+      "story_id",
+      "storyid",
+      "v"
+    ],
+    "scriptExtensions": [
+      "asp",
+      "aspx",
+      "cfm",
+      "cgi",
+      "do",
+      "jsp",
+      "php"
+    ],
+    "trackingParams": [
+      "__twitter_impression",
+      "_gl",
+      "amp",
+      "at_campaign",
+      "at_medium",
+      "cmp",
+      "cmpid",
+      "dclid",
+      "fbclid",
+      "feed",
+      "feedtype",
+      "from",
+      "fromapp",
+      "gclid",
+      "igshid",
+      "intcmp",
+      "ito",
+      "mc_cid",
+      "mc_eid",
+      "msclkid",
+      "ncid",
+      "ocid",
+      "outputtype",
+      "pfrom",
+      "ref",
+      "ref_src",
+      "referrer",
+      "rss",
+      "rssfeed",
+      "s_cid",
+      "share",
+      "shared",
+      "smid",
+      "source",
+      "spm",
+      "sr_share",
+      "src",
+      "tbref"
+    ],
+    "trackingPrefixes": [
+      "utm_"
+    ]
+  },
+  "secondLevelLabels": [
+    "ac",
+    "biz",
+    "co",
+    "com",
+    "edu",
+    "firm",
+    "gen",
+    "go",
+    "gov",
+    "govt",
+    "ind",
+    "info",
+    "int",
+    "ltd",
+    "mil",
+    "ne",
+    "net",
+    "nhs",
+    "nic",
+    "or",
+    "org",
+    "plc",
+    "police",
+    "res",
+    "sch"
+  ],
+  "slug": {
+    "minTokens": 6,
+    "numberWords": {
+      "eight": "8",
+      "five": "5",
+      "four": "4",
+      "nine": "9",
+      "one": "1",
+      "seven": "7",
+      "six": "6",
+      "ten": "10",
+      "three": "3",
+      "two": "2"
+    },
+    "recurringWords": [
+      "highlight",
+      "horoscope",
+      "latest",
+      "live",
+      "liveblog",
+      "scorecard",
+      "today",
+      "update",
+      "weather"
+    ],
+    "stopWords": [
+      "a",
+      "amid",
+      "an",
+      "and",
+      "are",
+      "as",
+      "at",
+      "be",
+      "by",
+      "for",
+      "from",
+      "in",
+      "into",
+      "is",
+      "it",
+      "its",
+      "of",
+      "on",
+      "or",
+      "over",
+      "that",
+      "the",
+      "this",
+      "to",
+      "was",
+      "were",
+      "with"
+    ]
+  },
+  "slugOutlets": [
+    "economictimes.indiatimes.com",
+    "nasa.gov"
+  ],
+  "suffixes": [
+    "gc.ca",
+    "gob.ar",
+    "gob.mx",
+    "gouv.fr",
+    "gv.at"
+  ],
+  "version": "2026.11.12"
+}
