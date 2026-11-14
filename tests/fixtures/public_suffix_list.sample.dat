@@ -1,0 +1,30 @@
+// A small excerpt in the format of https://publicsuffix.org/list/public_suffix_list.dat
+// used by the tests. It is not the real list.
+
+// ===BEGIN ICANN DOMAINS===
+
+com
+in
+co.in
+gov.in
+uk
+co.uk
+jp
+// Wildcard and exception, as in the real list.
+*.kawasaki.jp
+!city.kawasaki.jp
+ck
+*.ck
+!www.ck
+// A Unicode rule is matched in its A-label form.
+भारत
+// Trailing text after whitespace is ignored.
+example.test   some comment
+
+// ===END ICANN DOMAINS===
+// ===BEGIN PRIVATE DOMAINS===
+
+blogspot.com
+github.io
+
+// ===END PRIVATE DOMAINS===

@@ -1,0 +1,8 @@
+parameters:
+    level: 8
+    paths:
+        - src
+        - bootstrap.php
+        - bin/outlet-key
+        - tests
+        - examples

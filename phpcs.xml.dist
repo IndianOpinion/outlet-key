@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<ruleset name="outlet-key">
+    <description>PSR-12 for outlet-key.</description>
+    <arg name="extensions" value="php"/>
+    <arg name="colors"/>
+    <arg value="sp"/>
+
+    <file>src</file>
+    <file>tests</file>
+    <file>examples</file>
+    <file>bootstrap.php</file>
+    <file>bin/outlet-key</file>
+
+    <rule ref="PSR12"/>
+
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="140"/>
+            <property name="absoluteLineLimit" value="0"/>
+        </properties>
+        <!-- Test data holds long real-world URLs; splitting them hurts reading. -->
+        <exclude-pattern>tests/*</exclude-pattern>
+    </rule>
+
+    <!-- bin/outlet-key and bootstrap.php declare no symbols and run code by design. -->
+    <rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
+        <exclude-pattern>bin/outlet-key</exclude-pattern>
+        <exclude-pattern>bootstrap.php</exclude-pattern>
+        <exclude-pattern>examples/*</exclude-pattern>
+    </rule>
+</ruleset>
